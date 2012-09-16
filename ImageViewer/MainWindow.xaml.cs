@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
-using ImageViewer.ImageProviders;
+using ImageProviders;
 
 namespace ImageViewer
 {
@@ -60,33 +60,83 @@ namespace ImageViewer
 
 
             //  Synchronously download the image from the given url.
-            using (WebClient webClient = new WebClient())
+
+            byte[] rawImage;
+            using (var wc = new WebClient())
             {
-                webClient.Proxy = null; 
-                webClient.CachePolicy = new RequestCachePolicy(RequestCacheLevel.Default);
-                byte[] imageBytes = null;
-
-                imageBytes = webClient.DownloadData(this._imageLinkProvider.GetRandomImageUrl());
-
-                if (imageBytes == null)
-                {
-                    NextButton.IsEnabled = true;
-                    return;
-                }
-                MemoryStream imageStream = new MemoryStream(imageBytes);
-                BitmapImage image = new BitmapImage();
-
-                image.BeginInit();
-                image.StreamSource = imageStream;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-
-                image.Freeze();
-                imageStream.Close();
-
-                ImageBox.Source = image;
-                NextButton.IsEnabled = true;
+                rawImage = wc.DownloadData(this._imageLinkProvider.GetRandomImageUrl());
             }
+            MemoryStream imageStream = new MemoryStream(rawImage);
+            BitmapImage image = new BitmapImage();
+
+            image.BeginInit();
+            image.StreamSource = imageStream;
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.EndInit();
+
+            image.Freeze();
+            imageStream.Close();
+
+            ImageBox.Source = image;
+            NextButton.IsEnabled = true;
         }
+
+        /*
+         
+         scrape a web page and download all its images with async/await .net 4.5:
+
+private async void button1_Click(object sender, EventArgs e)
+{
+    await GetPage("http://www.macrumors.com");
+}
+
+public async Task GetPage(string pageUri)
+{
+    byte[] result;
+    using (var wc = new WebClient())
+    {
+        result = await wc.DownloadDataTaskAsync(pageUri);
+    }
+    var html = Encoding.UTF8.GetString(result);
+
+    var doc = new HtmlAgilityPack.HtmlDocument();
+    doc.LoadHtml(html);
+
+    var images = doc.DocumentNode.Descendants("img").Select(e =>
+e.GetAttributeValue("src", null))
+    .Where(s => !string.IsNullOrWhiteSpace(s) && (s.EndsWith("gif") ||
+        s.EndsWith("png") || s.EndsWith("jpg")))
+    .Distinct();
+    await DownloadImages(images, pageUri);
+
+}
+
+public async Task DownloadImages(IEnumerable<string> images, string pageUri)
+{
+    foreach (var image in images)
+    {
+        string urlToGrab;
+        if (!image.StartsWith("http"))
+        {
+            urlToGrab = pageUri + image;
+        }
+        else
+        {
+            urlToGrab = image;
+        }
+
+        var dotIndex = image.LastIndexOf('.') + 1;
+        var extension = image.Substring(dotIndex, image.Length - dotIndex);
+
+        using (var wc = new WebClient())
+        {
+            await wc.DownloadFileTaskAsync(urlToGrab,
+string.Format(@"C:\temp\{0}.{1}", Guid.NewGuid(), extension));
+
+        }
+    }
+} 
+         
+         * */
     }
 }
