@@ -12,10 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO;
 using System.Net;
 using System.Net.Cache;
 using ImageProviders;
+using System.Reflection;
+using System.IO;
 
 namespace ImageViewer
 {
@@ -34,7 +35,6 @@ namespace ImageViewer
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-
             NextButton.IsEnabled = false;
 
             /* 
@@ -50,15 +50,7 @@ namespace ImageViewer
             image.EndInit();*/
 
 
-            // Stuff to play with later.
-
-            //  var filePathSections = Assembly.GetEntryAssembly().Location.Split('\\');
-            // var fileName = String.Join("\\", filePathSections.Take(filePathSections.Count() - 1)) + "\\" + "redditsamplepageNew.txt";
-            //  var sampleRedditPageJson = Encoding.UTF8.GetString(File.ReadAllBytes(fileName));
-
-            //  var postUrls = GetPostUrlsFromRedditPage(sampleRedditPageJson);
-
-
+            
             //  Synchronously download the image from the given url.
 
             byte[] rawImage;
