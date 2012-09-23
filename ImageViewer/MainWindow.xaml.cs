@@ -30,7 +30,8 @@ namespace ImageViewer
         public MainWindow()
         {
             InitializeComponent();
-            _imageLinkProvider = new RedditPage(new Uri("http://www.reddit.com/r/aww"));
+            _imageLinkProvider = new PinterestBoard(new Uri("http://pinterest.com/all/?category=animals"));
+          //  _imageLinkProvider = new RedditPage(new Uri("http://www.reddit.com/r/aww"));
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)

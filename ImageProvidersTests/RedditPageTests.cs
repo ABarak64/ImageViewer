@@ -11,9 +11,15 @@ using ImageProvidersTests.Properties;
 
 namespace ImageProvidersTests
 {
+    /// <summary>
+    /// A class to test all relevant methods in the RedditPage class.
+    /// </summary>
     [TestFixture]
     class RedditPageTests
     {
+        /// <summary>
+        /// Confirm that we are correctly finding the post urls from a reddit page Json object.
+        /// </summary>
         [Test]
         public void PostUrlsTest()
         {

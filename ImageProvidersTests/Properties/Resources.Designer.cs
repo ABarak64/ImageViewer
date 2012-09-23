@@ -61,6 +61,23 @@ namespace ImageProvidersTests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html lang=&quot;en&quot; class=&quot;en&quot;&gt;
+        ///    &lt;head&gt;
+        ///        &lt;title&gt;Pinterest / Home &lt;/title&gt;
+        ///        
+        ///        &lt;link rel=&quot;icon&quot; href=&quot;http://passets-lt.pinterest.com/images/favicon.png&quot; type=&quot;image/x-icon&quot; /&gt;
+        ///        &lt;link rel=&quot;apple-touch-icon-precomposed&quot; href=&quot;http://passets-ec.pinterest.com/images/ipad_touch_icon.png&quot; /&gt;
+        ///        &lt;link rel=&quot;stylesheet&quot; href=&quot;http://passets-lt.pinterest.com/css/pinboard_1c320d6e.css&quot; type=&quot;text/css&quot; media=&quot;all&quot;/&gt;
+        ///        &lt;!--[if (gt IE 6)&amp;(lt IE 9)]&gt;&lt;link rel=&quot;styleshee [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string pinterestsamplepage {
+            get {
+                return ResourceManager.GetString("pinterestsamplepage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {&quot;kind&quot;: &quot;Listing&quot;, &quot;data&quot;: {&quot;modhash&quot;: &quot;&quot;, &quot;children&quot;: [{&quot;kind&quot;: &quot;t3&quot;, &quot;data&quot;: {&quot;domain&quot;: &quot;i.imgur.com&quot;, &quot;banned_by&quot;: null, &quot;media_embed&quot;: {}, &quot;subreddit&quot;: &quot;aww&quot;, &quot;selftext_html&quot;: null, &quot;selftext&quot;: &quot;&quot;, &quot;likes&quot;: null, &quot;link_flair_text&quot;: null, &quot;id&quot;: &quot;zq1zc&quot;, &quot;clicked&quot;: false, &quot;title&quot;: &quot;Not a cat or dog.. but made me smile &quot;, &quot;num_comments&quot;: 243, &quot;score&quot;: 2918, &quot;approved_by&quot;: null, &quot;over_18&quot;: false, &quot;hidden&quot;: false, &quot;thumbnail&quot;: &quot;http://a.thumbs.redditmedia.com/eBMMe_wJtPtZNoYN.jpg&quot;, &quot;subreddit_id&quot;: &quot;t5_2qh1o [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string redditsamplepage {
