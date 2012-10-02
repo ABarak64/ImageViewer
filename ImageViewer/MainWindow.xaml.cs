@@ -25,39 +25,33 @@ namespace ImageViewer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly IImageUrlProvider _imageLinkProvider;
+        private IImageUrlProvider _imageLinkProvider;
 
         public MainWindow()
         {
             InitializeComponent();
-            _imageLinkProvider = new PinterestBoard(new Uri("http://pinterest.com/all/?category=animals"));
-          //  _imageLinkProvider = new RedditPage(new Uri("http://www.reddit.com/r/aww"));
+
+          var providerFactory = new ImageProviderFactory();
+          var defaultProvider = providerFactory.ProviderNames.First();
+          ImageSourceDropDown.ItemsSource = providerFactory.ProviderNames;
+          ImageSourceDropDown.SelectedValue = defaultProvider;
         }
 
-        private void NextButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// User has clicked the 'Next' button, indicating they want to see a new image. Gets the new Image
+        /// Url, downloads the image and puts it on the GUI.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
             NextButton.IsEnabled = false;
 
-            /* 
-             // Async, stops working after a while.
-            var image = new BitmapImage();
-            image.BeginInit();
-            image.DownloadCompleted += (a, b) =>
-            {
-                ImageBox.Source = (BitmapImage)a;
-                NextButton.IsEnabled = true;
-            };
-            image.UriSource = this._imageLinkProvider.GetRandomImageUrl();
-            image.EndInit();*/
-
-
-            
-            //  Synchronously download the image from the given url.
-
+            //download the image from the given url.
             byte[] rawImage;
             using (var wc = new WebClient())
             {
-                rawImage = wc.DownloadData(this._imageLinkProvider.GetRandomImageUrl());
+                rawImage = await wc.DownloadDataTaskAsync(this._imageLinkProvider.GetRandomImageUrl());
             }
             MemoryStream imageStream = new MemoryStream(rawImage);
             BitmapImage image = new BitmapImage();
@@ -74,62 +68,20 @@ namespace ImageViewer
             NextButton.IsEnabled = true;
         }
 
-        /*
-         
-         scrape a web page and download all its images with async/await .net 4.5:
-
-private async void button1_Click(object sender, EventArgs e)
-{
-    await GetPage("http://www.macrumors.com");
-}
-
-public async Task GetPage(string pageUri)
-{
-    byte[] result;
-    using (var wc = new WebClient())
-    {
-        result = await wc.DownloadDataTaskAsync(pageUri);
-    }
-    var html = Encoding.UTF8.GetString(result);
-
-    var doc = new HtmlAgilityPack.HtmlDocument();
-    doc.LoadHtml(html);
-
-    var images = doc.DocumentNode.Descendants("img").Select(e =>
-e.GetAttributeValue("src", null))
-    .Where(s => !string.IsNullOrWhiteSpace(s) && (s.EndsWith("gif") ||
-        s.EndsWith("png") || s.EndsWith("jpg")))
-    .Distinct();
-    await DownloadImages(images, pageUri);
-
-}
-
-public async Task DownloadImages(IEnumerable<string> images, string pageUri)
-{
-    foreach (var image in images)
-    {
-        string urlToGrab;
-        if (!image.StartsWith("http"))
+        /// <summary>
+        /// User has changed their desired image source via changing the dropdown list on the GUI. Creates a new provider
+        /// based on the value of the dropdown that they selected.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ImageSourceDropDown_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            urlToGrab = pageUri + image;
+            NextButton.IsEnabled = false;
+            var providerName = e.AddedItems[0].ToString();
+            var providerFactory = new ImageProviderFactory();
+            // set the new imageprovider asynchronously since it requires downloading a page.
+            await Task.Run(() => { this._imageLinkProvider = providerFactory.CreateProvider(providerName); });
+            NextButton.IsEnabled = true;
         }
-        else
-        {
-            urlToGrab = image;
-        }
-
-        var dotIndex = image.LastIndexOf('.') + 1;
-        var extension = image.Substring(dotIndex, image.Length - dotIndex);
-
-        using (var wc = new WebClient())
-        {
-            await wc.DownloadFileTaskAsync(urlToGrab,
-string.Format(@"C:\temp\{0}.{1}", Guid.NewGuid(), extension));
-
-        }
-    }
-} 
-         
-         * */
     }
 }

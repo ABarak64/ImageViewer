@@ -5,6 +5,7 @@
     <Grid Margin="0,0,0,0">
         <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="199,292,0,0" VerticalAlignment="Top" Width="75" Click="NextButton_Click"/>
         <Image x:Name="ImageBox" HorizontalAlignment="Center" Height="247" Margin="22,25,30,0" VerticalAlignment="Top" Width="431"/>
+        <ComboBox x:Name="ImageSourceDropDown" HorizontalAlignment="Left" Margin="53,292,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ImageSourceDropDown_SelectionChanged"/>
 
     </Grid>
 </Window>

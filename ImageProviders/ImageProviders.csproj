@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IImageUrlProvider.cs" />
+    <Compile Include="ImageProviderFactory.cs" />
     <Compile Include="PinterestBoard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedditPage.cs" />
