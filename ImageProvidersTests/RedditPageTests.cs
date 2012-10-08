@@ -21,7 +21,7 @@ namespace ImageProvidersTests
         /// Confirm that we are correctly finding the post urls from a reddit page Json object.
         /// </summary>
         [Test]
-        public void PostUrlsTest()
+        public void PostUrls_Test()
         {
             List<Uri> expected = new List<Uri>
             {
@@ -59,6 +59,19 @@ namespace ImageProvidersTests
 
             var differenceQuery = expected.Except(actual);
             Assert.AreEqual(differenceQuery.Count(), 0);
+        }
+
+        /// <summary>
+        /// Confirm that the Reddit API still behaves the way we expect it to. This is an integration test and takes a non-trivial
+        /// amount of time to complete because it depends on the network. If it fails, check to see if it was a network error rather
+        /// than Reddit's API having changed.
+        /// </summary>
+        [Test]
+        public void RedditPage_Integration_Test()
+        {
+            var page = new RedditPage(new Uri("http://www.reddit.com/r/aww"));
+            var actual = page.GetRandomImageUrl();
+            Assert.IsTrue(actual.AbsoluteUri.EndsWith(".jpg"));
         }
     }
 }

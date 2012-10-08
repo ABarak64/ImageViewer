@@ -75,7 +75,7 @@ namespace ImageProviders
         {
             get
             {
-                ArrayList posts = _redditPage["data"]["children"];
+                IEnumerable posts = _redditPage["data"]["children"]; 
                 return posts.Cast<dynamic>().Select(post => new Uri(post["data"]["url"]));
             }
         }

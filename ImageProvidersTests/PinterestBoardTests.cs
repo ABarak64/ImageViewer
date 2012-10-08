@@ -84,5 +84,18 @@ namespace ImageProvidersTests
             var differenceQuery = expected.Except(actual);
             Assert.AreEqual(differenceQuery.Count(), 0);
         }
+
+        /// <summary>
+        /// Confirm that the Pinterest DOM is the way we expect it to be. This is an integration test and takes a non-trivial
+        /// amount of time to complete because it depends on the network. If it fails, check to see if it was a network error rather
+        /// than Pinterest's DOM having changed.
+        /// </summary>
+        [Test]
+        public void PinterestBoard_Integration_Test()
+        {
+            var page = new PinterestBoard(new Uri("http://pinterest.com/all/?category=animals"));
+            var actual = page.GetRandomImageUrl();
+            Assert.IsTrue(actual.AbsoluteUri.EndsWith(".jpg"));
+        }
     }
 }
